@@ -6,10 +6,17 @@ import heroImage from "@/assets/hero-image.jpg";
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
+  const whatsappNumber = "221776989148";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Message envoyé avec succès !");
+
+    const message = `Nom: ${form.name}\nEmail: ${form.email}\nSujet: ${form.subject}\nMessage: ${form.message}`;
+    const encodedMessage = encodeURIComponent(message);
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+
+    window.open(whatsappUrl, "_blank");
+    toast.success("Ouverture de WhatsApp pour envoyer votre message");
     setForm({ name: "", email: "", subject: "", message: "" });
   };
 
@@ -102,6 +109,11 @@ const ContactPage = () => {
                   {
                     icon: <Phone className="w-5 h-5" strokeWidth={1} />,
                     label: "Téléphone",
+                    value: "+221 77 698 91 48",
+                  },
+                  {
+                    icon: <Phone className="w-5 h-5" strokeWidth={1} />,
+                    label: "WhatsApp",
                     value: "+221 77 698 91 48",
                   },
                   {

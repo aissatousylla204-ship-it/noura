@@ -20,10 +20,10 @@ export interface Product {
 export const products: Product[] = [
   {
     id: "1",
-    name: "Hijab Premium en Soie",
+    name: "Voile Zerjey Premium",
     price: 2000,
     image: product1,
-    category: "Hijabs",
+    category: "Robe",
     collection: "femmes-voilees",
     isNew: true,
     sizes: ["Unique"],
@@ -45,7 +45,7 @@ export const products: Product[] = [
   {
     id: "3",
     name: "Blazer Structuré Camel",
-    price: 5000,
+    price: 7000,
     image: product3,
     category: "Vestes",
     collection: "femmes-modernes",
@@ -55,8 +55,8 @@ export const products: Product[] = [
   },
   {
     id: "4",
-    name: "Écharpe Cachemire Crème",
-    price: 79,
+    name: "Abaya robe ",
+    price: 30000,
     image: product4,
     category: "Accessoires",
     collection: "femmes-voilees",
@@ -67,19 +67,20 @@ export const products: Product[] = [
   },
   {
     id: "5",
-    name: "Pantalon Large Lin",
-    price: 99,
+    name: "Robe Chemise",
+    price: 15000,
     image: product2,
-    category: "Pantalons",
+    category: "Ensemnle",
     collection: "femmes-modernes",
+
     sizes: ["XS", "S", "M", "L", "XL"],
     colors: ["Crème", "Noir", "Sauge"],
     description: "Pantalon fluide en lin de haute qualité, coupe ample et élégante.",
   },
   {
     id: "6",
-    name: "Chemise Lin Homme",
-    price: 89,
+    name: "Chemise Pantalon Lin Homme",
+    price: 20000,
     image: colMenJalaba,
     category: "Chemises",
     collection: "hommes",
@@ -89,8 +90,8 @@ export const products: Product[] = [
   },
   {
     id: "7",
-    name: "Abaya Fluide Noire",
-    price: 159,
+    name: "Voile en soie",
+    price: 30000,
     image: product1,
     category: "Abayas",
     collection: "femmes-voilees",
@@ -101,7 +102,7 @@ export const products: Product[] = [
   {
     id: "8",
     name: "Costume Lin Beige",
-    price: 249,
+    price: 15000,
     image: product4,
     category: "Costumes",
     collection: "hommes",
