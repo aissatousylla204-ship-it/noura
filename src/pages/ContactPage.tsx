@@ -3,17 +3,17 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import heroImage from "@/assets/hero-image.jpg";
+import { WHATSAPP_OWNER_NUMBER } from "@/lib/pricing";
 
 const ContactPage = () => {
   const [form, setForm] = useState({ name: "", email: "", subject: "", message: "" });
-  const whatsappNumber = "221776989148";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const message = `Nom: ${form.name}\nEmail: ${form.email}\nSujet: ${form.subject}\nMessage: ${form.message}`;
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/${WHATSAPP_OWNER_NUMBER}?text=${encodedMessage}`;
 
     window.open(whatsappUrl, "_blank");
     toast.success("Ouverture de WhatsApp pour envoyer votre message");

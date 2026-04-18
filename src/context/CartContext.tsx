@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useCallback } from "react";
 import { Product } from "@/data/products";
+import { getProductCollectionPrice, getProductCollectionUnit } from "@/lib/pricing";
 
 export interface CartItem {
   product: Product;
@@ -14,6 +15,7 @@ interface CartContextType {
   clearCart: () => void;
   totalItems: number;
   totalPrice: number;
+  totalUnit: string | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -50,10 +52,17 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const clearCart = useCallback(() => setItems([]), []);
 
   const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
-  const totalPrice = items.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
+  const units = Array.from(new Set(items.map((item) => getProductCollectionUnit(item.product))));
+  const totalUnit = units.length === 1 ? units[0] : null;
+  const totalPrice = items.reduce(
+    (sum, i) => sum + getProductCollectionPrice(i.product) * i.quantity,
+    0
+  );
 
   return (
-    <CartContext.Provider value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice }}>
+    <CartContext.Provider
+      value={{ items, addItem, removeItem, updateQuantity, clearCart, totalItems, totalPrice, totalUnit }}
+    >
       {children}
     </CartContext.Provider>
   );

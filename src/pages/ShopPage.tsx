@@ -10,6 +10,7 @@ import colModernBlazerCamelImage from "@/assets/col-modern-blazer-camel.jpg";
 import hommeModerneImage from "@/assets/homme_moderne.jpg";
 import voileBlancImage from "@/assets/voile_blanc.jpg";
 import cinqColleImage from "@/assets/cinq_colle.jpg";
+import { getProductCollectionPrice } from "@/lib/pricing";
 
 const categories = ["Tout", "Hijabs", "Robes", "Vestes", "Pantalons", "Accessoires", "Abayas", "Chemises", "Costumes"];
 const sortOptions = [
@@ -53,8 +54,11 @@ const ShopPage = () => {
 
   const filtered = useMemo(() => {
     let result = activeCategory === "Tout" ? shopProducts : shopProducts.filter((p) => p.category === activeCategory);
-    if (sortBy === "price-asc") result = [...result].sort((a, b) => a.price - b.price);
-    else if (sortBy === "price-desc") result = [...result].sort((a, b) => b.price - a.price);
+    if (sortBy === "price-asc") {
+      result = [...result].sort((a, b) => getProductCollectionPrice(a) - getProductCollectionPrice(b));
+    } else if (sortBy === "price-desc") {
+      result = [...result].sort((a, b) => getProductCollectionPrice(b) - getProductCollectionPrice(a));
+    }
     else if (sortBy === "name") result = [...result].sort((a, b) => a.name.localeCompare(b.name));
     return result;
   }, [activeCategory, sortBy]);

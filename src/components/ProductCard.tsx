@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ShoppingBag, Star } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import { Product } from "@/data/products";
+import { formatCollectionPrice } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: Product;
@@ -50,7 +51,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
       {/* Price + Cart button */}
       <div className="flex items-center justify-between">
         <p className="font-sans text-[14px] text-[#666666] leading-5">
-          {product.price.toLocaleString("fr-FR")} FCFA
+          {formatCollectionPrice(product)}
         </p>
         <button
           onClick={() => addItem(product)}

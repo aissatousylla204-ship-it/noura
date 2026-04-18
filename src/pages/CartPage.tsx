@@ -1,19 +1,60 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Minus, Plus, X } from "lucide-react";
-import { useCart } from "@/context/CartContext";
-import { useState } from "react";
 import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
+import {
+  WHATSAPP_OWNER_NUMBER,
+  formatCollectionPrice,
+  getProductCollection,
+  getProductCollectionPrice,
+  getProductCollectionUnit,
+} from "@/lib/pricing";
 
 const CartPage = () => {
-  const { items, updateQuantity, removeItem, totalPrice, totalItems } = useCart();
-  const [promoCode, setPromoCode] = useState("");
+  const { items, updateQuantity, removeItem, totalPrice, totalItems, totalUnit } = useCart();
+
+  const handleCheckout = () => {
+    const lines = items.flatMap((item, index) => {
+      const collection = getProductCollection(item.product);
+      const unitPrice = getProductCollectionPrice(item.product);
+      const unit = getProductCollectionUnit(item.product);
+      const lineTotal = unitPrice * item.quantity;
+
+      return [
+        `${index + 1}. ${item.product.name}`,
+        `Collection: ${collection?.name ?? item.product.collection}`,
+        `Quantite: ${item.quantity}`,
+        `Prix unitaire: ${unitPrice.toLocaleString("fr-FR")} ${unit}`,
+        `Sous-total: ${lineTotal.toLocaleString("fr-FR")} ${unit}`,
+      ];
+    });
+
+    const summary = totalUnit
+      ? `Total: ${totalPrice.toLocaleString("fr-FR")} ${totalUnit}`
+      : `Total: ${totalPrice.toLocaleString("fr-FR")}`;
+
+    const message = [
+      "Bonjour, je souhaite passer cette commande :",
+      "",
+      ...lines,
+      "",
+      `Articles: ${totalItems}`,
+      summary,
+    ].join("\n");
+
+    const whatsappUrl = `https://wa.me/${WHATSAPP_OWNER_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank", "noopener,noreferrer");
+    toast.success("Redirection vers WhatsApp du proprietaire");
+  };
 
   return (
     <div className="py-8 md:py-12">
       <div className="container">
         <nav className="mb-8 font-sans text-xs text-muted-foreground">
-          <Link to="/" className="hover:text-primary transition-colors">Accueil</Link>
+          <Link to="/" className="hover:text-primary transition-colors">
+            Accueil
+          </Link>
           <span className="mx-2">/</span>
           <span className="text-foreground">Panier</span>
         </nav>
@@ -38,66 +79,91 @@ const CartPage = () => {
               to="/boutique"
               className="inline-block mt-8 bg-primary text-primary-foreground px-8 py-4 text-xs tracking-widest uppercase font-sans font-medium hover:bg-primary/90 transition-colors rounded-sm"
             >
-              Découvrir la boutique
+              Decouvrir la boutique
             </Link>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Items */}
             <div className="lg:col-span-2 space-y-6">
-              {items.map((item) => (
-                <motion.div
-                  key={item.product.id}
-                  layout
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex gap-6 border-b border-border/50 pb-6"
-                >
-                  <div className="w-24 h-32 bg-muted rounded-sm overflow-hidden shrink-0">
-                    <img src={item.product.image} alt={item.product.name} className="w-full h-full object-cover" />
-                  </div>
-                  <div className="flex-1 flex flex-col justify-between">
-                    <div>
-                      <div className="flex items-start justify-between">
-                        <h3 className="font-serif text-lg font-light">{item.product.name}</h3>
+              {items.map((item) => {
+                const collection = getProductCollection(item.product);
+                const unitPrice = getProductCollectionPrice(item.product);
+                const unit = getProductCollectionUnit(item.product);
+                const lineTotal = unitPrice * item.quantity;
+
+                return (
+                  <motion.div
+                    key={item.product.id}
+                    layout
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="flex gap-6 border-b border-border/50 pb-6"
+                  >
+                    <div className="w-24 h-32 bg-muted rounded-sm overflow-hidden shrink-0">
+                      <img
+                        src={item.product.image}
+                        alt={item.product.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <h3 className="font-serif text-lg font-light">{item.product.name}</h3>
+                            <p className="font-sans text-xs text-muted-foreground mt-1">
+                              Collection: {collection?.name ?? item.product.collection}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => removeItem(item.product.id)}
+                            className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                          >
+                            <X className="w-4 h-4" strokeWidth={1.5} />
+                          </button>
+                        </div>
+                        <p className="font-sans text-sm text-muted-foreground tabular-nums mt-2">
+                          {formatCollectionPrice(item.product)}
+                        </p>
+                        <p className="font-sans text-xs text-muted-foreground tabular-nums mt-1">
+                          Sous-total: {lineTotal.toLocaleString("fr-FR")} {unit}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3">
                         <button
-                          onClick={() => removeItem(item.product.id)}
-                          className="text-muted-foreground hover:text-foreground transition-colors p-1"
+                          onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
+                          className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary transition-colors rounded-sm"
                         >
-                          <X className="w-4 h-4" strokeWidth={1.5} />
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="font-sans text-sm tabular-nums w-6 text-center">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                          className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary transition-colors rounded-sm"
+                        >
+                          <Plus className="w-3 h-3" />
                         </button>
                       </div>
-                      <p className="font-sans text-sm text-muted-foreground tabular-nums">{item.product.price},00 €</p>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                        className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary transition-colors rounded-sm"
-                      >
-                        <Minus className="w-3 h-3" />
-                      </button>
-                      <span className="font-sans text-sm tabular-nums w-6 text-center">{item.quantity}</span>
-                      <button
-                        onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                        className="w-8 h-8 border border-border flex items-center justify-center hover:border-primary transition-colors rounded-sm"
-                      >
-                        <Plus className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
+                  </motion.div>
+                );
+              })}
             </div>
 
-            {/* Summary */}
             <div className="lg:col-span-1">
               <div className="border border-border/50 p-8 rounded-sm sticky top-24">
-                <h2 className="font-serif text-xl font-light mb-6">Récapitulatif</h2>
+                <h2 className="font-serif text-xl font-light mb-6">Recapitulatif</h2>
                 <div className="space-y-3 border-b border-border/50 pb-6 mb-6">
                   <div className="flex justify-between font-sans text-sm">
-                    <span className="text-muted-foreground">{totalItems} article{totalItems > 1 ? "s" : ""}</span>
-                    <span className="tabular-nums">{totalPrice},00 €</span>
+                    <span className="text-muted-foreground">
+                      {totalItems} article{totalItems > 1 ? "s" : ""}
+                    </span>
+                    <span className="tabular-nums">
+                      {totalPrice.toLocaleString("fr-FR")} {totalUnit ?? ""}
+                    </span>
                   </div>
                   <div className="flex justify-between font-sans text-sm">
                     <span className="text-muted-foreground">Livraison</span>
@@ -105,38 +171,20 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                {/* Promo code */}
-                <div className="mb-6">
-                  <label className="block text-xs tracking-widest uppercase font-sans text-muted-foreground mb-2">Code promo</label>
-                  <div className="flex">
-                    <input
-                      type="text"
-                      value={promoCode}
-                      onChange={(e) => setPromoCode(e.target.value)}
-                      placeholder="Entrez votre code"
-                      className="flex-1 border border-border bg-transparent px-3 py-2 text-sm font-sans focus:outline-none focus:border-primary rounded-sm"
-                    />
-                    <button
-                      onClick={() => toast.info("Code promo appliqué !")}
-                      className="bg-foreground text-background px-4 py-2 text-xs font-sans font-medium ml-2 rounded-sm"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-
                 <div className="flex justify-between font-serif text-xl mb-6">
                   <span>Total</span>
-                  <span className="tabular-nums">{totalPrice},00 €</span>
+                  <span className="tabular-nums">
+                    {totalPrice.toLocaleString("fr-FR")} {totalUnit ?? ""}
+                  </span>
                 </div>
 
                 <motion.button
                   whileHover={{ y: -2 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => toast.success("Commande confirmée !")}
+                  onClick={handleCheckout}
                   className="w-full bg-primary text-primary-foreground py-4 text-xs tracking-widest uppercase font-sans font-bold hover:bg-primary/90 transition-colors rounded-sm"
                 >
-                  Passer commande
+                  Commander sur WhatsApp
                 </motion.button>
               </div>
             </div>

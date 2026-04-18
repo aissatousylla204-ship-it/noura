@@ -9,6 +9,7 @@ import homeProduct2Image from "@/assets/col-veiled-hero.jpg";
 import homeProduct4Image from "@/assets/echarpe.jpg";
 import { products } from "@/data/products";
 import { useCart } from "@/context/CartContext";
+import { formatCollectionPrice } from "@/lib/pricing";
 
 const fadeInUp = {
   initial: { opacity: 0, y: 30 },
@@ -299,7 +300,7 @@ const Index = () => {
                   </h3>
                   <div className="flex items-center justify-between">
                     <p className="font-sans text-[14px] text-[#666666] leading-5">
-                      {product.price.toLocaleString("fr-FR")} FCFA
+                      {formatCollectionPrice(product)}
                     </p>
                     <button
                       onClick={() => addItem(product)}

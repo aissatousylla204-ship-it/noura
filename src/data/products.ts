@@ -17,6 +17,14 @@ export interface Product {
   description: string;
 }
 
+export interface Collection {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  unit: string;
+}
+
 export const products: Product[] = [
   {
     id: "1",
@@ -112,19 +120,25 @@ export const products: Product[] = [
   },
 ];
 
-export const collections = [
+export const collections: Collection[] = [
   {
     id: "femmes-voilees",
+    price: 2000,
+    unit: "FCFA",
     name: "Femmes Voilées",
     description: "Des tenues élégantes conçues pour les femmes qui portent le voile avec fierté.",
   },
   {
     id: "femmes-modernes",
+    price: 7000,
+    unit: "FCFA",
     name: "Femmes Modernes",
     description: "Une mode pudique et contemporaine pour la femme active et raffinée.",
   },
   {
     id: "hommes",
+    price: 15000,
+    unit: "FCFA",
     name: "Hommes",
     description: "Des pièces intemporelles pour l'homme élégant et moderne.",
   },
