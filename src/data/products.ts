@@ -8,6 +8,7 @@ export interface Product {
   id: string;
   name: string;
   price: number;
+  useCustomPrice?: boolean;
   image: string;
   category: string;
   collection: string;
@@ -31,7 +32,7 @@ export const products: Product[] = [
     name: "Voile Zerjey Premium",
     price: 2000,
     image: product1,
-    category: "Robe",
+    category: "Hijab",
     collection: "femmes-voilees",
     isNew: true,
     sizes: ["Unique"],
@@ -40,10 +41,11 @@ export const products: Product[] = [
   },
   {
     id: "2",
-    name: "Robe Longue Sauge",
-    price: 30000,
+    name: "Robe Chemise Longue",
+    price: 10000,
+    useCustomPrice: true,
     image: product2,
-    category: "Robes",
+    category: "Robe",
     collection: "femmes-modernes",
     isNew: true,
     sizes: ["XS", "S", "M", "L", "XL"],
@@ -55,7 +57,7 @@ export const products: Product[] = [
     name: "Blazer Structuré Camel",
     price: 7000,
     image: product3,
-    category: "Vestes",
+    category: "Ensemble 2 pieces",
     collection: "femmes-modernes",
     sizes: ["XS", "S", "M", "L"],
     colors: ["Camel", "Noir"],
@@ -66,7 +68,7 @@ export const products: Product[] = [
     name: "Abaya robe ",
     price: 30000,
     image: product4,
-    category: "Accessoires",
+    category: "Abaya robe",
     collection: "femmes-voilees",
     isNew: true,
     sizes: ["Unique"],
@@ -78,7 +80,7 @@ export const products: Product[] = [
     name: "Robe Chemise",
     price: 15000,
     image: product2,
-    category: "Ensemnle",
+    category: "Ensemble 2 pieces",
     collection: "femmes-modernes",
 
     sizes: ["XS", "S", "M", "L", "XL"],
@@ -90,7 +92,7 @@ export const products: Product[] = [
     name: "Chemise Pantalon Lin Homme",
     price: 20000,
     image: colMenJalaba,
-    category: "Chemises",
+    category: "Jalébé",
     collection: "hommes",
     sizes: ["S", "M", "L", "XL", "XXL"],
     colors: ["Blanc", "Beige", "Bleu ciel"],
@@ -98,10 +100,10 @@ export const products: Product[] = [
   },
   {
     id: "7",
-    name: "Voile en soie",
-    price: 30000,
+    name: "Voile Cashmere",
+    price: 2000,
     image: product1,
-    category: "Abayas",
+    category: "Hijab",
     collection: "femmes-voilees",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Noir", "Bleu nuit"],
@@ -112,7 +114,7 @@ export const products: Product[] = [
     name: "Costume Lin Beige",
     price: 15000,
     image: product4,
-    category: "Costumes",
+    category: "Costume africain",
     collection: "hommes",
     sizes: ["S", "M", "L", "XL"],
     colors: ["Beige", "Gris"],

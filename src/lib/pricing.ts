@@ -8,7 +8,7 @@ export const getCollectionById = (collectionId: string) =>
 export const getProductCollection = (product: Product) => getCollectionById(product.collection);
 
 export const getProductCollectionPrice = (product: Product) =>
-  getProductCollection(product)?.price ?? product.price;
+  product.useCustomPrice ? product.price : getProductCollection(product)?.price ?? product.price;
 
 export const getProductCollectionUnit = (product: Product) =>
   getProductCollection(product)?.unit ?? "FCFA";
