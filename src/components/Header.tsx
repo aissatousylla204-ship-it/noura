@@ -1,6 +1,6 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { ShoppingBag, Menu, X, Search, User } from "lucide-react";
+import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import Logo from "./Logo";
 import { useCart } from "@/context/CartContext";
 
@@ -86,17 +86,9 @@ const Header = () => {
           </form>
 
           <Link
-            to="/compte"
-            aria-label="Mon compte"
-            className="text-white hover:text-black/60 transition-colors"
-          >
-            <User className="w-5 h-5" strokeWidth={1.5} />
-          </Link>
-
-          <Link
             to="/panier"
             aria-label="Panier"
-            className="relative text-white hover:text-black/60 transition-colors"
+            className="relative"
           >
             <ShoppingBag className="w-5 h-5" strokeWidth={1.5} />
             {totalItems > 0 && (
