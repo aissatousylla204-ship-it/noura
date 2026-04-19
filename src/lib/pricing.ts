@@ -11,7 +11,7 @@ export const getProductCollectionPrice = (product: Product) =>
   product.useCustomPrice ? product.price : getProductCollection(product)?.price ?? product.price;
 
 export const getProductCollectionUnit = (product: Product) =>
-  getProductCollection(product)?.unit ?? "FCFA";
+  product.customUnit ?? getProductCollection(product)?.unit ?? "FCFA";
 
 export const formatCollectionPrice = (product: Product) =>
   `${getProductCollectionPrice(product).toLocaleString("fr-FR")} ${getProductCollectionUnit(product)}`;
