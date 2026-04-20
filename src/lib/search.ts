@@ -7,9 +7,21 @@ export const normalizeQuery = (value: string) =>
     .replace(/[\u0300-\u036f]/g, "")
     .trim();
 
+export const tokenizeQuery = (value: string) =>
+  normalizeQuery(value)
+    .split(/\s+/)
+    .filter(Boolean);
+
 export const includesQuery = (text: string, query: string) => {
   if (!query) return true;
   return normalizeQuery(text).includes(normalizeQuery(query));
+};
+
+export const matchesAllTokens = (text: string, query: string) => {
+  const haystack = normalizeQuery(text);
+  const tokens = tokenizeQuery(query);
+  if (tokens.length === 0) return true;
+  return tokens.every((token) => haystack.includes(token));
 };
 
 export const getCollectionName = (collectionId: string) =>
@@ -26,7 +38,7 @@ export const matchesProduct = (product: ProductType, query: string) => {
     product.colors.join(" "),
     product.sizes.join(" "),
   ].join(" ");
-  return includesQuery(haystack, query);
+  return matchesAllTokens(haystack, query);
 };
 
 export const matchesCollection = (collectionId: string, query: string) => {
@@ -34,7 +46,7 @@ export const matchesCollection = (collectionId: string, query: string) => {
   const collection = collections.find((c) => c.id === collectionId);
   if (!collection) return false;
   const haystack = [collection.name, collection.description, collection.id].join(" ");
-  return includesQuery(haystack, query);
+  return matchesAllTokens(haystack, query);
 };
 
 export const groupProductsByCollection = (products: Product[]) => {
