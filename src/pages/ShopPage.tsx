@@ -75,7 +75,7 @@ const shopProducts: Product[] = [
   },
   {
     id: "10",
-    name: "Robe large 20K",
+    name: "Robe large",
     price: 10000,
     useCustomPrice: true,
     image: robeLargeImage,
